@@ -82,14 +82,14 @@ jobs:
         run: |
           if [ -f package-lock.json ]; then npm ci; else npm install --no-audit --no-fund; fi
 
-      # A plugin's lockfile pins the commit of `@scm-js/plugin-api` it last installed, so
-      # a contract that moved is invisible until someone runs `npm update`. On a schedule
-      # (and on a manual run) the tip is installed instead — nothing is saved, so this
-      # only ever turns a run red, which is the point: drift is a failing check in the
-      # repository it affects rather than a copy of the declarations quietly going stale.
+      # A plugin's lockfile pins the `@scm-js/plugin-api` it last installed, so a contract
+      # that moved is invisible until someone runs `npm update`. On a schedule (and on a
+      # manual run) the newest is installed instead — nothing is saved, so this only ever
+      # turns a run red, which is the point: drift is a failing check in the repository it
+      # affects rather than a copy of the declarations quietly going stale.
       - name: Take the newest plugin API (scheduled runs)
         if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
-        run: npm install --no-save --no-audit --no-fund "github:scm-js/plugin-api#main"
+        run: npm install --no-save --no-audit --no-fund "@scm-js/plugin-api@latest"
 
       - name: Type-check
         run: npm run typecheck --if-present
