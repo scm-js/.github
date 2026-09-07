@@ -43,14 +43,16 @@
 # the same commit.
 #
 # `main` requires a pull request, and a run's own GITHUB_TOKEN cannot bypass that, so the
-# build commit is pushed with REGISTRY_PAT — an organisation secret belonging to the owner,
-# whom the ruleset does let through. It reaches this workflow through the caller's
-# `secrets: inherit`, and only the push step ever sees it: an org-wide token left in the
-# checkout's git config would be readable by everything `npm install` runs. Without the
-# secret — a fork, or a pull request from one — the push falls back to GITHUB_TOKEN, which
-# is what a fork wants anyway. A push made with a PAT *does* start a workflow run, unlike
-# one made with GITHUB_TOKEN, so the commit message carries `[skip ci]`; otherwise every
-# build would be followed by a second run that finds nothing to do.
+# build commit goes over SSH with CI_BUILD_KEY — a write deploy key on this repository and
+# nothing else, which the ruleset names as a bypass actor. A token was the obvious thing to
+# reach for and it does not work: a fine-grained PAT acts as itself rather than as the
+# person who owns it, so it inherits none of their bypass, and a classic one that would
+# have to be an organisation-wide administrator credential read by every plugin build. The
+# key is written only inside the push step, so nothing `npm install` runs can read it.
+# Without the secret — a fork, or a pull request from one — the push falls back to
+# GITHUB_TOKEN, which is what a fork wants anyway. A deploy-key push *does* start a
+# workflow run, unlike one made with GITHUB_TOKEN, so the commit message carries
+# `[skip ci]`; otherwise every build would be followed by a second run with nothing to do.
 name: Plugin CI
 
 on:
@@ -152,7 +154,7 @@ jobs:
         env:
           OUTFILE: ${{ inputs.outfile }}
           # Only this step sees it, and only on a push to main — see the note at the top.
-          REGISTRY_PAT: ${{ secrets.REGISTRY_PAT }}
+          CI_BUILD_KEY: ${{ secrets.CI_BUILD_KEY }}
         run: |
           if git diff --quiet -- "$OUTFILE" && [ -z "$(git status --porcelain -- "$OUTFILE")" ]; then
             echo "$OUTFILE is unchanged."
@@ -162,8 +164,12 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -- "$OUTFILE"
           git commit -m "Build $OUTFILE [skip ci]"
-          if [ -n "${REGISTRY_PAT:-}" ]; then
-            git push "https://x-access-token:$REGISTRY_PAT@github.com/$GITHUB_REPOSITORY" HEAD:main
+          if [ -n "${CI_BUILD_KEY:-}" ]; then
+            install -m 700 -d ~/.ssh
+            printf '%s\n' "$CI_BUILD_KEY" > ~/.ssh/ci_build
+            chmod 600 ~/.ssh/ci_build
+            export GIT_SSH_COMMAND="ssh -i ~/.ssh/ci_build -o IdentitiesOnly=yes -o StrictHostKeyChecking=accept-new"
+            git push "git@github.com:$GITHUB_REPOSITORY.git" HEAD:main
           else
             git push origin HEAD:main
           fi
