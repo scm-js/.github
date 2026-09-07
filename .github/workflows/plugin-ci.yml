@@ -11,6 +11,7 @@
 #   jobs:
 #     ci:
 #       uses: scm-js/.github/.github/workflows/plugin-ci.yml@main
+#       secrets: inherit
 #
 # (the doubled `.github` is the workflows directory inside the organisation's `.github`
 # repository) so what a plugin repository has to know about building itself lives in one
@@ -28,8 +29,7 @@
 #      changed. That file is what the editor loads
 #      (`plugin.json`'s `build`), and loading it costs one fetch: no TypeScript compiler
 #      in the browser, no import graph to walk, and the plugin may use npm dependencies,
-#      which the source path cannot resolve. A push made with GITHUB_TOKEN starts no
-#      workflow run, so committing the build here cannot loop.
+#      which the source path cannot resolve.
 #
 #   3. **On a `v*` tag, checks the committed build instead of writing one.** The bundle
 #      the editor runs at a tag has to be the bundle that source builds to, or "read the
@@ -41,6 +41,16 @@
 # file on every run, which would defeat both the "only commit when it changed" rule and
 # the reproducibility check above. What ties a bundle to its source is that they are in
 # the same commit.
+#
+# `main` requires a pull request, and a run's own GITHUB_TOKEN cannot bypass that, so the
+# build commit is pushed with REGISTRY_PAT — an organisation secret belonging to the owner,
+# whom the ruleset does let through. It reaches this workflow through the caller's
+# `secrets: inherit`, and only the push step ever sees it: an org-wide token left in the
+# checkout's git config would be readable by everything `npm install` runs. Without the
+# secret — a fork, or a pull request from one — the push falls back to GITHUB_TOKEN, which
+# is what a fork wants anyway. A push made with a PAT *does* start a workflow run, unlike
+# one made with GITHUB_TOKEN, so the commit message carries `[skip ci]`; otherwise every
+# build would be followed by a second run that finds nothing to do.
 name: Plugin CI
 
 on:
@@ -141,6 +151,8 @@ jobs:
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         env:
           OUTFILE: ${{ inputs.outfile }}
+          # Only this step sees it, and only on a push to main — see the note at the top.
+          REGISTRY_PAT: ${{ secrets.REGISTRY_PAT }}
         run: |
           if git diff --quiet -- "$OUTFILE" && [ -z "$(git status --porcelain -- "$OUTFILE")" ]; then
             echo "$OUTFILE is unchanged."
@@ -149,6 +161,10 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -- "$OUTFILE"
-          git commit -m "Build $OUTFILE"
-          git push origin HEAD:main
+          git commit -m "Build $OUTFILE [skip ci]"
+          if [ -n "${REGISTRY_PAT:-}" ]; then
+            git push "https://x-access-token:$REGISTRY_PAT@github.com/$GITHUB_REPOSITORY" HEAD:main
+          else
+            git push origin HEAD:main
+          fi
           echo "Committed $OUTFILE."
