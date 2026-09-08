@@ -4,14 +4,15 @@
 
 # scmJS
 
-A map editor for **StarCraft** and **Brood War** that runs in a browser tab, modelled on
-StarEdit, SCMDraft 2 and StarForge. It opens the game's own `.scm` and `.scx` maps (and a
-bare `.chk` scenario), draws them with the game's terrain and unit graphics, and saves
-archives the game plays. Whatever it does not understand in a file is copied through
-untouched, so a map only loses what you deliberately change.
+A map editor for **StarCraft** and **Brood War**, written in TypeScript and modelled on
+StarEdit, SCMDraft 2 and StarForge — in a browser tab, or as a desktop app. It opens the
+game's own `.scm` and `.scx` maps (and a bare `.chk` scenario), draws them with the game's
+terrain and unit graphics, and saves archives the game plays. Whatever it does not
+understand in a file is copied through untouched, so a map only loses what you
+deliberately change.
 
 **[Open the editor](https://editor.scmjs.dev)** &nbsp;·&nbsp;
-[Downloads and nightlies](https://scmjs.dev) &nbsp;·&nbsp;
+[Desktop builds and nightlies](https://scmjs.dev) &nbsp;·&nbsp;
 [The guide](https://docs.scmjs.dev/guide/) &nbsp;·&nbsp;
 [Documentation](https://docs.scmjs.dev)
 
