@@ -45,7 +45,7 @@ copy
 * [https://docs.scmjs.dev/api](https://docs.scmjs.dev/api) - the plugin API reference
 
 During development you can load your plugin right from your own git repository. Once you have your plugin written and
-want to add it to the registry for everyone, fill out this issue: placeholder
+want to add it to the registry for everyone, [fill out this issue form](https://github.com/scm-js/registry/issues/new?template=submit-plugin.yml).
 
 ### The editor
 To contribute to the editor itself, see these documents and open a PR against the [scm-js repository](https://github.com/scm-js/scm-js).
@@ -55,8 +55,8 @@ To contribute to the editor itself, see these documents and open a PR against th
 
 ## The repositories
 ### Main
-| | |
-| --- | --- |
+| Repository | Description |
+| :--- | :--- |
 | [scm-js](https://github.com/scm-js/scm-js) | the editor itself, and the map maker's guide |
 | [plugin-api](https://github.com/scm-js/plugin-api) | `@scm-js/plugin-api`, the type definitions a plugin builds against |
 | [registry](https://github.com/scm-js/registry) | the index behind **Plugins ▸ Browse Plugins…** |
@@ -65,8 +65,8 @@ To contribute to the editor itself, see these documents and open a PR against th
 | [nightly](https://github.com/scm-js/nightly) | last night's build of `main`, served at [nightly.editor.scmjs.dev](https://nightly.editor.scmjs.dev) |
 
 ### Plugins
-| | |
-| --- | --- |
+| Plugin | Description |
+| :--- | :--- |
 | [scm-scx](https://github.com/scm-js/plugin-scm-scx) | search [scmscx.com](https://scmscx.com) and open a map straight from it |
 | [repair](https://github.com/scm-js/plugin-repair) | checks a map as it opens and offers to rebuild what is missing or broken |
 | [walkability](https://github.com/scm-js/plugin-walkability) | where ground units can actually go, and how wide the chokes are |
