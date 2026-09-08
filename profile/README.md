@@ -10,10 +10,13 @@ StarEdit, SCMDraft 2 and StarForge. It runs in a native browser tab or as a desk
 It comes with a powerful plugin API. See the [plugins page](https://https://scmjs.dev/plugins.html)
 for the complete current list of plugins. Install them in the editor by going to **Plugins** → **Browse Plugins**.
 
-#### Main Site
+#### Supported Languages
+English and Korean (AI generated). It should automatically configure locale, but you can override in application preferences. **Currently looking for a native Korean speaker to review the localization!**
+
+### Main Site
 https://scmjs.dev
 
-#### Releases
+### Releases
 
 | Release | Link |
 | :--- | :--- |
