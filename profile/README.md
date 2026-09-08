@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://raw.githubusercontent.com/scm-js/.github/main/profile/globe.png" width="880" alt="scmJS">
+  <img src="https://raw.githubusercontent.com/scm-js/.github/main/profile/icon.svg" width="160" alt="scmJS">
 </p>
 
 # scmJS
