@@ -2,6 +2,13 @@
   <img src="https://raw.githubusercontent.com/scm-js/.github/main/profile/icon.svg" width="160" alt="scmJS">
 </p>
 
+<p align="center">
+  <a href="https://github.com/scm-js/scm-js/releases/latest"><img alt="Latest release" src="https://img.shields.io/github/v/release/scm-js/scm-js?style=flat-square&label=release&color=e6b95c&labelColor=12151b"></a>
+  <a href="https://github.com/scm-js/scm-js/actions/workflows/build.yml"><img alt="Build status" src="https://img.shields.io/github/actions/workflow/status/scm-js/scm-js/build.yml?branch=main&style=flat-square&label=build&labelColor=12151b"></a>
+  <a href="https://www.npmjs.com/package/@scm-js/plugin-api"><img alt="Plugin API on npm" src="https://img.shields.io/npm/v/%40scm-js%2Fplugin-api?style=flat-square&label=plugin%20api&color=4fd1c5&labelColor=12151b"></a>
+  <a href="https://github.com/scm-js/scm-js/blob/main/LICENSE"><img alt="MIT licensed" src="https://img.shields.io/github/license/scm-js/scm-js?style=flat-square&label=license&color=4fd1c5&labelColor=12151b"></a>
+</p>
+
 # scmJS
 
 scmJS is a powerful, fully featured map editor for **StarCraft** and **Brood War**, written in TypeScript and modelled on
