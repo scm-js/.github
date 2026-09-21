@@ -70,6 +70,10 @@ on:
         description: "The bundle the manifest's `build` names."
         type: string
         default: "dist/plugin.js"
+      artifacts:
+        description: "Other files the repository's `build` script writes and the plugin loads at run time, separated by spaces (TrigScript's `dist/compiler.js`). They are checked at a tag and committed on main with the bundle."
+        type: string
+        default: ""
       esbuild-version:
         description: "Only used by the fallback below, for a repository with no `build` script of its own."
         type: string
@@ -119,6 +123,7 @@ jobs:
           ENTRY: ${{ inputs.entry }}
           OUTFILE: ${{ inputs.outfile }}
           ESBUILD: ${{ inputs.esbuild-version }}
+          ARTIFACTS: ${{ inputs.artifacts }}
         run: |
           set -e
           if node -e 'process.exit(require("./package.json").scripts?.build ? 0 : 1)'; then
@@ -128,8 +133,10 @@ jobs:
               --bundle --format=esm --target=es2022 --platform=browser \
               --outfile="$OUTFILE"
           fi
-          test -s "$OUTFILE"
-          echo "$OUTFILE - $(wc -c < "$OUTFILE") bytes"
+          for f in $OUTFILE $ARTIFACTS; do
+            test -s "$f" || { echo "::error::The build did not write $f."; exit 1; }
+            echo "$f - $(wc -c < "$f") bytes"
+          done
 
       # A tag is what the editor loads a pinned plugin from, so the build committed there
       # has to be the one its source produces. Nothing is written here: the run fails.
@@ -137,32 +144,39 @@ jobs:
         if: startsWith(github.ref, 'refs/tags/v')
         env:
           OUTFILE: ${{ inputs.outfile }}
+          ARTIFACTS: ${{ inputs.artifacts }}
         run: |
-          if ! git diff --quiet -- "$OUTFILE"; then
-            echo "::error::$OUTFILE at this tag is not what its source builds to. Build on main and tag that commit."
-            git diff --stat -- "$OUTFILE"
-            exit 1
-          fi
-          if [ -n "$(git status --porcelain -- "$OUTFILE")" ]; then
-            echo "::error::$OUTFILE is not committed at this tag."
-            exit 1
-          fi
-          echo "$OUTFILE matches its source."
+          failed=0
+          for f in $OUTFILE $ARTIFACTS; do
+            if ! git diff --quiet -- "$f"; then
+              echo "::error::$f at this tag is not what its source builds to. Build on main and tag that commit."
+              git diff --stat -- "$f"
+              failed=1
+            elif [ -n "$(git status --porcelain -- "$f")" ]; then
+              echo "::error::$f is not committed at this tag."
+              failed=1
+            else
+              echo "$f matches its source."
+            fi
+          done
+          exit $failed
 
       - name: Commit the build (main)
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         env:
           OUTFILE: ${{ inputs.outfile }}
+          ARTIFACTS: ${{ inputs.artifacts }}
           # Only this step sees it, and only on a push to main — see the note at the top.
           CI_BUILD_KEY: ${{ secrets.CI_BUILD_KEY }}
         run: |
-          if git diff --quiet -- "$OUTFILE" && [ -z "$(git status --porcelain -- "$OUTFILE")" ]; then
-            echo "$OUTFILE is unchanged."
+          # shellcheck disable=SC2086 -- a list of paths, split on purpose
+          if git diff --quiet -- $OUTFILE $ARTIFACTS && [ -z "$(git status --porcelain -- $OUTFILE $ARTIFACTS)" ]; then
+            echo "$OUTFILE $ARTIFACTS: unchanged."
             exit 0
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -- "$OUTFILE"
+          git add -- $OUTFILE $ARTIFACTS
           git commit -m "Build $OUTFILE [skip ci]"
           if [ -n "${CI_BUILD_KEY:-}" ]; then
             install -m 700 -d ~/.ssh
