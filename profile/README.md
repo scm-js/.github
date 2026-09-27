@@ -14,7 +14,7 @@
 scmJS is a powerful, fully featured map editor for **StarCraft** and **Brood War**, written in TypeScript and modelled on
 StarEdit, SCMDraft 2 and StarForge. It runs in a native browser tab or as a desktop app.
 
-It comes with a powerful plugin API. See the [plugins page](https://https://scmjs.dev/plugins.html)
+It comes with a powerful plugin API. See the [plugins page](https://scmjs.dev/plugins.html)
 for the complete current list of plugins. Install them in the editor by going to **Plugins** → **Browse Plugins**.
 
 #### Supported Languages
@@ -88,6 +88,12 @@ To contribute to the editor itself, see these documents and open a PR against th
 | [scmjs-dev](https://github.com/scm-js/plugin-scmjs-dev) | a scmjs.dev account: maps kept online, and the AI assistant |
 | [melee-wizard](https://github.com/scm-js/plugin-melee-wizard) | symmetric start locations and mineral lines for a ladder map |
 | [section-explorer](https://github.com/scm-js/plugin-section-explorer) | an annotated hex editor over the map's own sections |
+| [trigger-map](https://github.com/scm-js/plugin-trigger-map) | the map's triggers as a graph: who sets and who reads each switch, counter and location, and what looks wrong |
+| [timelapse](https://github.com/scm-js/plugin-timelapse) | records the map as you build it and exports the recording as a GIF or video |
+| [aftermath](https://github.com/scm-js/plugin-aftermath) | plays a replay back over its map: heat maps, build orders, APM |
+| [magenta](https://github.com/scm-js/plugin-magenta) | a trigger editor where each trigger reads as a sentence, with Remastered EUD conditions and actions |
+| [eudplib](https://github.com/scm-js/plugin-eudplib) | runs eudplib in the browser so other plugins can build EUD maps |
+| [api-playground](https://github.com/scm-js/plugin-api-playground) | try the plugin API in a panel without writing a plugin |
 | [hello-world](https://github.com/scm-js/plugin-hello-world) | the smallest plugin there is, to copy |
 
 ## License
