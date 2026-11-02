@@ -102,7 +102,6 @@ Open a pull request against [scm-js](https://github.com/scm-js/scm-js). These he
 | [timelapse](https://github.com/scm-js/plugin-timelapse) | records the map as you build it and exports the recording as a GIF or video |
 | [aftermath](https://github.com/scm-js/plugin-aftermath) | plays a replay back over its map: heat maps, build orders, APM |
 | [magenta](https://github.com/scm-js/plugin-magenta) | a trigger editor where each trigger reads as a sentence, with Remastered EUD conditions and actions |
-| [eudplib](https://github.com/scm-js/plugin-eudplib) | runs eudplib in the browser so other plugins can build EUD maps |
 | [scm-sim](https://github.com/scm-js/plugin-scm-sim) | lets other plugins use the game engine behind [scmjs.dev/play](https://scmjs.dev/play/), and adds **Tools ▸ Test Map in Browser** |
 | [api-playground](https://github.com/scm-js/plugin-api-playground) | try the plugin API in a panel without writing a plugin |
 | [hello-world](https://github.com/scm-js/plugin-hello-world) | the smallest plugin there is, to copy |
