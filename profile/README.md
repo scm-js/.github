@@ -76,12 +76,15 @@ Open a pull request against [scm-js](https://github.com/scm-js/scm-js). These he
 
 | Repository | Description |
 | :--- | :--- |
-| [scm-js](https://github.com/scm-js/scm-js) | the editor itself, and the map maker's guide |
+| [scm-js](https://github.com/scm-js/scm-js) | the editor itself, the map maker's guide, and the `scmjs` command line ([`@scm-js/cli`](https://www.npmjs.com/package/@scm-js/cli)) |
 | [plugin-api](https://github.com/scm-js/plugin-api) | `@scm-js/plugin-api`, the type definitions a plugin builds against |
 | [registry](https://github.com/scm-js/registry) | the list behind **Plugins ▸ Browse Plugins…** |
 | [site](https://github.com/scm-js/site) | [scmjs.dev](https://scmjs.dev), the landing page |
 | [docs](https://github.com/scm-js/docs) | [docs.scmjs.dev](https://docs.scmjs.dev), built from the editor's own documents |
 | [nightly](https://github.com/scm-js/nightly) | last night's build of `main`, served at [scmjs.dev/nightly](https://scmjs.dev/nightly/) |
+| [replay](https://github.com/scm-js/replay) | [`@scm-js/replay`](https://www.npmjs.com/package/@scm-js/replay), which reads StarCraft replays from 1.16 to Remastered |
+| [scmbot](https://github.com/scm-js/scmbot) | builds a BWAPI bot into a `.scmbot` file to play against on [scmjs.dev/play](https://scmjs.dev/play/) |
+| [ai-engine](https://github.com/scm-js/ai-engine) | the prompt recipes behind scmjs.dev's AI features |
 
 ### Plugins
 
